@@ -1,7 +1,11 @@
+#new code
 import speech_recognition as sr
 import pyttsx3
 import webbrowser
 import datetime
+import os
+import random
+import requests
 
 # Initialize the recognizer and text-to-speech engine
 recognizer = sr.Recognizer()
@@ -43,8 +47,39 @@ def execute_command(command):
     elif 'open google' in command:
         speak("Opening Google")
         webbrowser.open("https://www.google.com")
+    elif 'open facebook' in command:
+        speak("Opening Facebook")
+        webbrowser.open("https://www.facebook.com")
+    elif 'play music' in command:
+        speak("Playing music")
+        os.system("start wmplayer")  # Adjust to your preferred music player
+    elif 'tell me a joke' in command:
+        jokes = [
+            "Why don’t skeletons fight each other? They don’t have the guts.",
+            "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+            "What’s orange and sounds like a parrot? A carrot!"
+        ]
+        joke = random.choice(jokes)
+        speak(joke)
+    elif 'weather' in command:
+        speak("Fetching the weather for you.")
+        # You can use an API like OpenWeatherMap to get the weather data.
+        # For simplicity, let's pretend we're fetching it.
+        weather = "It's sunny with a high of 25°C."
+        speak(weather)
+    elif 'open twitter' in command:
+        speak("Opening Twitter")
+        webbrowser.open("https://www.twitter.com")
+    elif 'search' in command:
+        search_query = command.split('search', 1)[1]
+        speak(f"Searching for {search_query}")
+        webbrowser.open(f"https://www.google.com/search?q={search_query}")
+    elif 'stop' in command:
+        speak("Goodbye!")
+        return True
     else:
         speak("I'm not sure how to help with that.")
+    return False
 
 # Main function to run the assistant
 def main():
@@ -52,11 +87,9 @@ def main():
     while True:
         command = take_command()
         if command:
-            if 'stop' in command:
-                speak("Goodbye!")
+            stop = execute_command(command)
+            if stop:
                 break
-            else:
-                execute_command(command)
         else:
             speak("I didn't catch that. Please try again.")
 
